@@ -1,20 +1,27 @@
-export type LedgerId = string;
+export type BookId = string;
 export type AccountId = string;
 
-export interface LedgerLine {
+export interface BookLine {
   account: AccountId;
   /** Minor units; positive is a debit, negative is a credit. */
   amount: number;
 }
 
-export interface LedgerEntry {
+export interface BookEntry {
   id: string;
-  ledgerId: LedgerId;
+  ledgerId: BookId;
   postedAt: string;
   memo: string;
-  lines: LedgerLine[];
+  lines: BookLine[];
 }
 
-export function entryIsBalanced(entry: LedgerEntry): boolean {
+export function entryIsBalanced(entry: BookEntry): boolean {
   return entry.lines.reduce((sum, line) => sum + line.amount, 0) === 0;
 }
+
+// Backward-compatible aliases for the pre-rename type names. Downstream layers
+// (ledger/services/api) still import these; they are removed once the later
+// PR in the Ledger -> Book rename adopts the Book* names directly.
+export type LedgerId = BookId;
+export type LedgerLine = BookLine;
+export type LedgerEntry = BookEntry;
