@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Renamed the `Ledger` domain model and its core operations to `Book` (`openLedger` -> `openBook`; `Ledger`, `LedgerEntry`, `LedgerLine`, `LedgerId`, `LedgerSummary` -> `Book*`).
+- Renamed report/settlement env vars: `LEDGER_TIMEOUT_MS` -> `BOOK_TIMEOUT_MS`, `LEDGER_REGION` -> `BOOK_REGION` (services layer; the API layer still reads `LEDGER_REGION`).
 
 ## 0.4.1
 

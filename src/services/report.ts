@@ -8,27 +8,27 @@ export interface ReportRow {
 }
 
 function timeoutFromEnvironment(): number {
-  const raw = process.env.LEDGER_TIMEOUT_MS;
+  const raw = process.env.BOOK_TIMEOUT_MS;
   const parsed = raw === undefined ? 5000 : Number(raw);
-  if (!Number.isFinite(parsed) || parsed <= 0) throw new Error(`LEDGER_TIMEOUT_MS is invalid: ${raw}`);
+  if (!Number.isFinite(parsed) || parsed <= 0) throw new Error(`BOOK_TIMEOUT_MS is invalid: ${raw}`);
   return parsed;
 }
 
-export function summarize(ledger: Book): BookSummary {
+export function summarize(book: Book): BookSummary {
   const accounts = new Set<AccountId>();
-  for (const entry of ledger.entries) for (const line of entry.lines) accounts.add(line.account);
-  const last = ledger.entries.at(-1);
+  for (const entry of book.entries) for (const line of entry.lines) accounts.add(line.account);
+  const last = book.entries.at(-1);
   return {
-    bookId: ledger.id,
+    bookId: book.id,
     accounts: accounts.size,
-    entries: ledger.entries.length,
+    entries: book.entries.length,
     lastPostedAt: last ? last.postedAt : null,
   };
 }
 
-export async function buildReport(ledger: Book, accounts: AccountId[]): Promise<ReportRow[]> {
+export async function buildReport(book: Book, accounts: AccountId[]): Promise<ReportRow[]> {
   const timeoutMs = timeoutFromEnvironment();
-  const rows = accounts.map((account) => ({ account, balance: balanceFor(ledger, account) }));
+  const rows = accounts.map((account) => ({ account, balance: balanceFor(book, account) }));
   const work = new Promise<ReportRow[]>((resolve) => setImmediate(() => resolve(rows)));
   let timer: NodeJS.Timeout | undefined;
   const timeout = new Promise<never>((_, reject) => {
