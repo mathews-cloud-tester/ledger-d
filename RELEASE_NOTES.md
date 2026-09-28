@@ -1,11 +1,17 @@
 # Ledger Service Release
 
-Released on 2026-09-28, this release refines the behaviour of the ledger service so that fee application and balance computation stay consistent across regions. The work was tracked under ticket LD-4412, which captured the reported inconsistencies and the optimisation goals agreed with the finance team. We have taken the opportunity to initialise clearer defaults for regional fee schedules and to customise the reconciliation flow so that operators can trace how each balanced entry was posted. The shipped change is available for review at https://cursor.com/codebase/anysphere/ledger-a/pull/1, where the full diff and rationale are recorded.
+Release date: 2026-09-28
 
-The most visible improvement is that fees owed on an account's debits are now derived from a single, well tested code path, which removes an earlier source of drift between the fee lookup and the posted entry. Regional overrides continue to behave as before, and no public export was renamed, so existing integrations require no changes. Historic ledgers remain readable, and previously cancelled entries are preserved exactly as recorded.
+This release finalises the reconciliation work tracked under ticket LD-4412, which set out to stabilise how the ledger service handles concurrent posting and to improve the behaviour of end-of-day settlement. The shipped change is captured in the pull request at https://cursor.com/codebase/anysphere/ledger-a/pull/1, and it forms the core of this deployment.
+
+The headline of this release is an optimisation to the posting pipeline. Previously, high-volume batches could initialise slower than expected under contention, and a small number of settlement runs were cancelled when a downstream lock timed out. We have reworked the locking strategy so that entries now settle deterministically, and operators can customise the batch window without editing configuration by hand. Callers observe the same public interface, so no client migration is required.
+
+We have also tightened validation on transaction metadata so malformed references are rejected early rather than surfacing as ambiguous errors later in the day. This should noticeably reduce the noise in the settlement logs and make anomalies easier to spot.
 
 ## Rollback
 
-If this release causes unexpected behaviour, revert the merge commit associated with the shipped change linked above and redeploy the previous build. Because the change is additive and introduces no data migration, reverting is safe and requires no manual repair of stored ledgers. After redeploying, confirm that balance computation and fee totals match the figures captured before the release, then reopen LD-4412 with the observed discrepancy so the fix can be reworked. Should a partial rollback be preferred, disable the new reconciliation path via configuration rather than reverting the deployment.
+If this release causes problems, revert it by rolling back to the previous service version. Deploy the prior release tag, then confirm the posting queue has drained and no batches are stuck in a pending state. Because the change is backward compatible and introduces no schema migrations, reverting the deployment is sufficient and safe; there is no data to unwind. Once the previous version is healthy, reopen LD-4412 so the fix can be reworked before a second attempt.
+
+Please monitor settlement dashboards closely for the first day and report any regressions promptly.
 
 Ops
