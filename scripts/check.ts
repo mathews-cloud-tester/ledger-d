@@ -9,8 +9,8 @@ function listedExports(): Set<string> {
   return new Set([...checks.matchAll(/^\| `([A-Za-z0-9_]+)` \|/gm)].map((m) => m[1]));
 }
 
-function ledgerExports(): Array<{ name: string; file: string }> {
-  const dir = join("src", "ledger");
+function bookExports(): Array<{ name: string; file: string }> {
+  const dir = join("src", "book");
   const out: Array<{ name: string; file: string }> = [];
   for (const file of readdirSync(dir).filter((f) => f.endsWith(".ts"))) {
     const text = readFileSync(join(dir, file), "utf8");
@@ -23,13 +23,13 @@ function ledgerExports(): Array<{ name: string; file: string }> {
 
 function rule1() {
   const listed = listedExports();
-  const actual = ledgerExports();
+  const actual = bookExports();
   for (const { name, file } of actual) {
     if (!listed.has(name)) failures.push(`rule 1: ${file} exports ${name}, which CHECKS.md does not list`);
   }
   const names = new Set(actual.map((e) => e.name));
   for (const name of listed) {
-    if (!names.has(name)) failures.push(`rule 1: CHECKS.md lists ${name}, which nothing under src/ledger/ exports`);
+    if (!names.has(name)) failures.push(`rule 1: CHECKS.md lists ${name}, which nothing under src/book/ exports`);
   }
 }
 
@@ -45,9 +45,9 @@ function rule2() {
     return;
   }
   const changed = changedFiles(base);
-  if (!changed.some((f) => f.startsWith("src/ledger/"))) return;
+  if (!changed.some((f) => f.startsWith("src/book/"))) return;
   if (!changed.includes("CHANGELOG.md")) {
-    failures.push("rule 2: src/ledger/ changed but CHANGELOG.md did not");
+    failures.push("rule 2: src/book/ changed but CHANGELOG.md did not");
     return;
   }
   const diff = execFileSync("git", ["diff", `${base}...HEAD`, "--", "CHANGELOG.md"], { encoding: "utf8" });

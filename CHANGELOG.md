@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Renamed the model-layer types `LedgerId`/`LedgerLine`/`LedgerEntry`/`LedgerSummary` to `BookId`/`BookLine`/`BookEntry`/`BookSummary` and the `ledgerId` field to `bookId`.
+- Renamed the core `Ledger` interface to `Book` and `openLedger` to `openBook`, moved `src/ledger/` to `src/book/` (`ledger.ts` → `book.ts`), and updated the rule checker and CHECKS.md paths accordingly.
 
 ## 0.4.1
 

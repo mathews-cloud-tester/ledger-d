@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { applyFee, feeScheduleFor } from "../src/ledger/index.ts";
+import { applyFee, feeScheduleFor } from "../src/book/index.ts";
 
 test("proportional fee above the minimum", () => {
   assert.equal(applyFee(100_000, feeScheduleFor("eu-west")), 250);
