@@ -1,0 +1,12 @@
+{
+  "name": "ledger-a",
+  "version": "0.4.1",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.6" },
+  "scripts": {
+    "check": "node --experimental-strip-types --no-warnings scripts/check.ts",
+    "test": "node --experimental-strip-types --no-warnings --test \"tests/*.test.ts\"",
+    "ci": "npm run check && npm test"
+  }
+}
