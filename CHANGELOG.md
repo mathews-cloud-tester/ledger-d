@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Renamed the `Ledger` type to `Book` and `openLedger` to `openBook`; entry/summary types and the `ledgerId` field become `Book*`/`bookId`.
+
 ## 0.4.1
 
 - Settlement retries once when the region service times out.
