@@ -1,18 +1,18 @@
-import { entryIsBalanced, type AccountId, type LedgerEntry, type LedgerId } from "../models/entry.ts";
+import { entryIsBalanced, type AccountId, type BookEntry, type BookId } from "../models/entry.ts";
 import { applyFee, type FeeSchedule } from "./fees.ts";
 
 export interface Ledger {
-  id: LedgerId;
-  entries: LedgerEntry[];
+  id: BookId;
+  entries: BookEntry[];
 }
 
-export function openLedger(id: LedgerId): Ledger {
+export function openLedger(id: BookId): Ledger {
   return { id, entries: [] };
 }
 
-export function postEntry(ledger: Ledger, entry: LedgerEntry): Ledger {
-  if (entry.ledgerId !== ledger.id) {
-    throw new Error(`entry ${entry.id} belongs to ledger ${entry.ledgerId}, not ${ledger.id}`);
+export function postEntry(ledger: Ledger, entry: BookEntry): Ledger {
+  if (entry.bookId !== ledger.id) {
+    throw new Error(`entry ${entry.id} belongs to ledger ${entry.bookId}, not ${ledger.id}`);
   }
   if (!entryIsBalanced(entry)) {
     throw new Error(`entry ${entry.id} is not balanced`);

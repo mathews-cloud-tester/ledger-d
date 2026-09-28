@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { balanceFor, feesOwedBy, feeScheduleFor, openLedger, postEntry } from "../src/ledger/index.ts";
-import type { LedgerEntry } from "../src/models/entry.ts";
+import type { BookEntry } from "../src/models/entry.ts";
 import { summarize } from "../src/services/report.ts";
 import { settle } from "../src/services/settlement.ts";
 
-const entry = (id: string, amount: number): LedgerEntry => ({
+const entry = (id: string, amount: number): BookEntry => ({
   id,
-  ledgerId: "L1",
+  bookId: "L1",
   postedAt: `2026-09-0${id.length}T00:00:00Z`,
   memo: `entry ${id}`,
   lines: [
