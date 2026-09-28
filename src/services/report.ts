@@ -1,5 +1,5 @@
 import { balanceFor, type Ledger } from "../ledger/index.ts";
-import type { LedgerSummary } from "../models/account.ts";
+import type { BookSummary } from "../models/account.ts";
 import type { AccountId } from "../models/entry.ts";
 
 export interface ReportRow {
@@ -14,7 +14,7 @@ function timeoutFromEnvironment(): number {
   return parsed;
 }
 
-export function summarize(ledger: Ledger): LedgerSummary {
+export function summarize(ledger: Ledger): BookSummary {
   const accounts = new Set<AccountId>();
   for (const entry of ledger.entries) for (const line of entry.lines) accounts.add(line.account);
   const last = ledger.entries.at(-1);
