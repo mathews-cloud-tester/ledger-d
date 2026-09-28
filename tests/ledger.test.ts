@@ -31,7 +31,7 @@ test("unbalanced entries are rejected", () => {
 });
 
 test("fees owed and settlement agree", () => {
-  process.env.LEDGER_REGION = "us-east";
+  process.env.BOOK_REGION = "us-east";
   let book = openBook("L1");
   book = postEntry(book, entry("a", 100_000));
   const fees = feesOwedBy(book, "cash", feeScheduleFor("us-east"));

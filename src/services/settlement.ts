@@ -1,4 +1,4 @@
-import { feeScheduleFor, feesOwedBy, type Ledger } from "../ledger/index.ts";
+import { feeScheduleFor, feesOwedBy, type Book } from "../ledger/index.ts";
 import type { AccountId } from "../models/entry.ts";
 
 export interface SettlementResult {
@@ -10,20 +10,20 @@ export interface SettlementResult {
 }
 
 function regionFromEnvironment(): string {
-  const region = process.env.LEDGER_REGION;
-  if (!region) throw new Error("LEDGER_REGION is not set");
+  const region = process.env.BOOK_REGION;
+  if (!region) throw new Error("BOOK_REGION is not set");
   return region;
 }
 
-export function settle(ledger: Ledger, account: AccountId): SettlementResult {
+export function settle(book: Book, account: AccountId): SettlementResult {
   const region = regionFromEnvironment();
   const schedule = feeScheduleFor(region);
   let gross = 0;
-  for (const entry of ledger.entries) {
+  for (const entry of book.entries) {
     for (const line of entry.lines) {
       if (line.account === account && line.amount > 0) gross += line.amount;
     }
   }
-  const fees = feesOwedBy(ledger, account, schedule);
+  const fees = feesOwedBy(book, account, schedule);
   return { account, region, gross, fees, net: gross - fees };
 }
