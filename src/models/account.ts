@@ -20,7 +20,3 @@ export interface BookSummary {
 export function accountKey(account: Pick<Account, "ledgerId" | "id">): string {
   return `${account.ledgerId}:${account.id}`;
 }
-
-// Backward-compatible alias for the pre-rename type name. Removed once the
-// services layer adopts the Book* names directly.
-export type LedgerSummary = BookSummary;
