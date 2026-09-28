@@ -1,4 +1,4 @@
-import { feeScheduleFor, feesOwedBy, type Ledger } from "../ledger/index.ts";
+import { feeScheduleFor, feesOwedBy, type Book } from "../ledger/index.ts";
 import type { AccountId } from "../models/entry.ts";
 
 export interface SettlementResult {
@@ -15,7 +15,7 @@ function regionFromEnvironment(): string {
   return region;
 }
 
-export function settle(ledger: Ledger, account: AccountId): SettlementResult {
+export function settle(ledger: Book, account: AccountId): SettlementResult {
   const region = regionFromEnvironment();
   const schedule = feeScheduleFor(region);
   let gross = 0;

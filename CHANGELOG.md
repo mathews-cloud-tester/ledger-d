@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Renamed the `Ledger` domain model and its core operations to `Book` (`openLedger` -> `openBook`; `Ledger`, `LedgerEntry`, `LedgerLine`, `LedgerId`, `LedgerSummary` -> `Book*`).
+
 ## 0.4.1
 
 - Settlement retries once when the region service times out.

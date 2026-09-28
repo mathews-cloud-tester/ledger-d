@@ -1,5 +1,5 @@
-import { balanceFor, type Ledger } from "../ledger/index.ts";
-import type { LedgerSummary } from "../models/account.ts";
+import { balanceFor, type Book } from "../ledger/index.ts";
+import type { BookSummary } from "../models/account.ts";
 import type { AccountId } from "../models/entry.ts";
 
 export interface ReportRow {
@@ -14,19 +14,19 @@ function timeoutFromEnvironment(): number {
   return parsed;
 }
 
-export function summarize(ledger: Ledger): LedgerSummary {
+export function summarize(ledger: Book): BookSummary {
   const accounts = new Set<AccountId>();
   for (const entry of ledger.entries) for (const line of entry.lines) accounts.add(line.account);
   const last = ledger.entries.at(-1);
   return {
-    ledgerId: ledger.id,
+    bookId: ledger.id,
     accounts: accounts.size,
     entries: ledger.entries.length,
     lastPostedAt: last ? last.postedAt : null,
   };
 }
 
-export async function buildReport(ledger: Ledger, accounts: AccountId[]): Promise<ReportRow[]> {
+export async function buildReport(ledger: Book, accounts: AccountId[]): Promise<ReportRow[]> {
   const timeoutMs = timeoutFromEnvironment();
   const rows = accounts.map((account) => ({ account, balance: balanceFor(ledger, account) }));
   const work = new Promise<ReportRow[]>((resolve) => setImmediate(() => resolve(rows)));
