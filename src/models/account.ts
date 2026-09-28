@@ -1,22 +1,22 @@
-import type { AccountId, LedgerId } from "./entry.ts";
+import type { AccountId, JournalId } from "./entry.ts";
 
 export type AccountKind = "asset" | "liability" | "revenue" | "expense";
 
 export interface Account {
   id: AccountId;
-  ledgerId: LedgerId;
+  journalId: JournalId;
   kind: AccountKind;
   name: string;
   currency: string;
 }
 
-export interface LedgerSummary {
-  ledgerId: LedgerId;
+export interface JournalSummary {
+  journalId: JournalId;
   accounts: number;
   entries: number;
   lastPostedAt: string | null;
 }
 
-export function accountKey(account: Pick<Account, "ledgerId" | "id">): string {
-  return `${account.ledgerId}:${account.id}`;
+export function accountKey(account: Pick<Account, "journalId" | "id">): string {
+  return `${account.journalId}:${account.id}`;
 }

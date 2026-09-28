@@ -1,20 +1,20 @@
-export type LedgerId = string;
+export type JournalId = string;
 export type AccountId = string;
 
-export interface LedgerLine {
+export interface JournalLine {
   account: AccountId;
   /** Minor units; positive is a debit, negative is a credit. */
   amount: number;
 }
 
-export interface LedgerEntry {
+export interface JournalEntry {
   id: string;
-  ledgerId: LedgerId;
+  journalId: JournalId;
   postedAt: string;
   memo: string;
-  lines: LedgerLine[];
+  lines: JournalLine[];
 }
 
-export function entryIsBalanced(entry: LedgerEntry): boolean {
+export function entryIsBalanced(entry: JournalEntry): boolean {
   return entry.lines.reduce((sum, line) => sum + line.amount, 0) === 0;
 }
