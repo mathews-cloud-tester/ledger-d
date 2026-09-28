@@ -29,7 +29,7 @@ export async function route(req: IncomingMessage, res: ServerResponse): Promise<
     } catch {
       return send(res, { status: 400, body: { error: "invalid JSON" } });
     }
-    return send(res, createInvoice(body as Record<string, unknown>));
+    return send(res, createInvoice(body));
   }
   if (req.method === "GET" && req.url === "/invoices") return send(res, listInvoices());
   if (req.method === "GET" && req.url === "/healthz") {
