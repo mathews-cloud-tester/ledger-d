@@ -20,5 +20,3 @@ export interface BookSummary {
 export function accountKey(account: Pick<Account, "ledgerId" | "id">): string {
   return `${account.ledgerId}:${account.id}`;
 }
-
-/** @deprecated use BookSummary */ export type LedgerSummary = BookSummary;
